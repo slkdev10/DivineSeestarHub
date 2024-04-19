@@ -1,0 +1,161 @@
+local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
+local Window = library:CreateWindow("Divine Seestar Hub!") -- Creates the window
+local CharacterExploits = Window:CreateFolder("Character Exploits!") -- Creates the folder(U will put here your buttons,etc)
+local BackpackExploit = Window:CreateFolder("Backpack Exploits!") -- Creates the folder(U will put here your buttons,etc)
+local PlayerExploit = Window:CreateFolder("Player Exploits!") -- Creates the folder(U will put here your buttons,etc)
+local Player = game:GetService("Players").LocalPlayer;
+local StarterPack = game:GetService("StarterPack")
+local AntiRagdoll = false;
+local StealPlayers = false;
+local StealPlayersRunning = false;
+
+PlayerExploit:Box("Set your rank! (255 is divine sister!)","number",function(value) -- "number" or "string"
+    Player:SetAttribute("Rank",tonumber(value))
+    Player:SetAttribute("TrueRank",tonumber(value))
+end)
+
+BackpackExploit:Button("Receive Holy Stick",function()
+    local HasReceived = false;
+    for i,v in pairs(game.Players:GetPlayers()) do
+        if v:GetAttribute("Rank") >= 53 then
+            if v.Backpack:FindFirstChild("Holy Stick") then
+                if HasReceived == false then
+                    HasReceived = true;
+                    v.Backpack:FindFirstChild("Holy Stick").Parent = Player.Backpack
+                end;
+            end;
+        end;
+    end;
+end)
+
+BackpackExploit:Button("Receive H.N.C.",function()
+    local HasReceived = false;
+    for i,v in pairs(game.Players:GetPlayers()) do
+        if v:GetAttribute("Rank") >= 53 then
+            if v.Backpack:FindFirstChild("H.N.C.") then
+                if HasReceived == false then
+                    HasReceived = true;
+                    v.Backpack:FindFirstChild("H.N.C.").Parent = Player.Backpack
+                end;
+            end;
+        end;
+    end;
+end)
+
+CharacterExploits:Toggle("Ragdoll",function(bool)
+    if Player.Character ~= nil then
+        Player.Character:SetAttribute("Downed",bool)
+    end;
+end)
+
+CharacterExploits:Toggle("Stun",function(bool)
+    if Player.Character ~= nil then
+        Player.Character:SetAttribute("InRagdoll",bool)
+    end;
+end)
+
+CharacterExploits:Toggle("Steal Players when ragdolled",function(bool)
+    if Player.Character ~= nil then
+        StealPlayers = bool;
+    end;
+end)
+
+CharacterExploits:Toggle("Anti Ragdoll",function(bool)
+    if Player.Character ~= nil then
+        AntiRagdoll = bool;
+    end;
+end)
+
+CharacterExploits:Slider("Wallspeed",{
+    min = 10; -- min value of the slider
+    max = 30; -- max value of the slider
+    precise = true; -- max 2 decimals
+},function(value)
+    if Player.Character ~= nil then
+        if Player.Character:WaitForChild("Humanoid",10) then
+            Player.Character:WaitForChild("Humanoid",10).WalkSpeed = value;
+        end;
+    end;
+end)
+
+CharacterExploits:Dropdown("Dropdown",{"A","B","C"},true,function(mob) --true/false, replaces the current title "Dropdown" with the option that t
+    print(mob)
+end)
+
+--[[
+    b:Bind("Bind",Enum.KeyCode.C,function() --Default bind
+    print("Yes")
+end)
+]]
+
+--[[
+    b:ColorPicker("ColorPicker",Color3.fromRGB(255,0,0),function(color) --Default color
+    print(color)
+end)
+]]
+
+--[[b:Box("Box","number",function(value) -- "number" or "string"
+    print(value)
+end)]]
+
+spawn(
+    function()
+        while task.wait(1) do
+            if AntiRagdoll == true then
+                if Player.Character ~= nil then
+                    Player.Character:SetAttribute("Downed",false)
+                end;
+            end;
+        end;
+    end
+);
+--[[
+    for i, Player in pairs(game.Players:GetPlayers()) do
+    local Character = Player.Character;
+    Character:GetAttributeChangedSignal("Downed"):Connect(
+        function()
+            if Character:GetAttribute("Downed") == true and Enabled == true and game.Players.LocalPlayer.Character ~= nil then
+                if game.Players.LocalPlayer.Character:GetAttribute("Carrying") == false then
+                    game.Players.LocalPlayer.Character:PivotTo(Character:WaitForChild("Head",10).CFrame)
+                end;
+            end;
+        end
+    );
+end;
+]]
+
+spawn(
+   function()
+       while task.wait() do
+           if StealPlayers == true and StealPlayersRunning == false then
+                StealPlayersRunning = true;
+                for i, Player in pairs(game.Players:GetPlayers()) do
+                    local Character = Player.Character;
+                    Character:GetAttributeChangedSignal("Downed"):Connect(
+                        function()
+                            if Character:GetAttribute("Downed") == true and StealPlayers == true and game.Players.LocalPlayer.Character ~= nil then
+                                if game.Players.LocalPlayer.Character:GetAttribute("Carrying") == false then
+                                    game.Players.LocalPlayer.Character:PivotTo(Character:WaitForChild("Head",10).CFrame)
+                                end;
+                            end;
+                        end
+                    );
+                end;
+                game.Players.PlayerAdded:Connect(function(Player)
+                    Player.CharacterAdded:Connect(function()
+                        local Character = Player.Character;
+                        Character:GetAttributeChangedSignal("Downed"):Connect(
+                            function()
+                                if Character:GetAttribute("Downed") == true and StealPlayers == true and game.Players.LocalPlayer.Character ~= nil then
+                                    if game.Players.LocalPlayer.Character:GetAttribute("Carrying") == false then
+                                        game.Players.LocalPlayer.Character:PivotTo(Character:WaitForChild("Head",10).CFrame)
+                                    end;
+                                end;
+                            end
+                        );
+                    end)
+                end);
+           end;
+       end;
+    end
+)
