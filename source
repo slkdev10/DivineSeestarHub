@@ -42,6 +42,10 @@ BackpackExploit:Button("Receive H.N.C.",function()
     end;
 end)
 
+PlayerExploit:Button("Infinite Yield",function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+end)
+
 CharacterExploits:Toggle("Ragdoll",function(bool)
     if Player.Character ~= nil then
         Player.Character:SetAttribute("Downed",bool)
@@ -100,7 +104,7 @@ end)]]
 
 spawn(
     function()
-        while task.wait(1) do
+        while task.wait() do
             if AntiRagdoll == true then
                 if Player.Character ~= nil then
                     Player.Character:SetAttribute("Downed",false)
